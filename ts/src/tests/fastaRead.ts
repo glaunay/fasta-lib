@@ -14,8 +14,8 @@ fastaLib.parser(file).then((fastaObj)=>{
     }  
 
     fastaObj.pipe(process.stdout);
-
-    fastaObj.setSlice(1,1).pipe(process.stdout);
+    fastaObj.setSlice(1, 1).pipe(process.stdout);
+    fastaObj.setSlice(0, 2).setTag('customTag').pipe(process.stdout);
 
 }).catch((e)=>{
     console.log("Parsing error");

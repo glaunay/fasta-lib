@@ -10,6 +10,14 @@ class fasta extends streams.Duplex {
         this.buffer = undefined;
         this.outputTag = "inputMFasta";
     }
+    _copy() {
+        let clone = new fasta();
+        clone.sliceStart = this.sliceStart;
+        clone.sliceOffset = this.sliceOffset;
+        clone.record = this.record;
+        clone.outputTag = this.outputTag;
+        return clone;
+    }
     _write(chunk, enc, next) {
         this.buffer = this.buffer ? Buffer.concat([this.buffer, chunk]) : chunk;
         next();
@@ -22,14 +30,20 @@ class fasta extends streams.Duplex {
     _read() {
         let start = this.sliceStart ? this.sliceStart : 0;
         let stop = this.sliceOffset ? start + this.sliceOffset < this.record.length ? start + this.sliceOffset : this.record.length - 1 : start + this.record.length - 1;
-        let dBuf = this.record.filter((e, i) => { return i <= stop && e.seq && e.header; }).map((rec) => { return `${rec.header}\n${rec.seq}`; });
+        let dBuf = this.record.filter((e, i) => { return i <= stop && i >= start && e.seq && e.header; }).map((rec) => { return `${rec.header}\n${rec.seq}`; });
         this.push(JSON.stringify({ [this.outputTag]: dBuf }));
         this.push(null);
     }
     setSlice(start = 0, offset) {
-        this.sliceStart = start;
-        this.sliceOffset = offset;
-        return this;
+        let clone = this._copy();
+        clone.sliceStart = start;
+        clone.sliceOffset = offset;
+        return clone;
+    }
+    setTag(cTag) {
+        let clone = this._copy();
+        clone.outputTag = cTag;
+        return clone;
     }
     // Returns as readable stream
     streamJsonFasta(prefix = "inputMFasta", start, offset) {
