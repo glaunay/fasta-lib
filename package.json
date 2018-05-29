@@ -1,0 +1,22 @@
+{
+  "name": "fasta-lib",
+  "version": "1.0.0",
+  "description": "TS/ES7 implementation of FASTA like sequence parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glaunay/fasta-lib.git"
+  },
+  "author": "GL",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/glaunay/fasta-lib/issues"
+  },
+  "homepage": "https://github.com/glaunay/fasta-lib#readme",
+  "dependencies": {
+    "@types/node": "^10.1.2"
+  }
+}
